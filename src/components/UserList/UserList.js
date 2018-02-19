@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import UserItem from '../UserItem/UserItem';
 import { getRandomUsers } from '../../User';
-import './UserList.css';
 // import Filter from '../Filter/Filter';
 
 export class UserList extends Component {
@@ -18,40 +17,6 @@ export class UserList extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-//   getRandomUsers(userCount, gender, minYear, maxYear) {
-//   const promise = fetch(`https://randomuser.me/api/?results=${userCount}&nat=US&gender=${gender}`)
-//     .then(response => {
-//       if(response.status >= 400) {
-//         throw `Response invalid ( ${response.status} )`;
-//         return;
-//       }
-
-//       return response.json();
-//     })
-//     .then(({results}) => {
-//       return results;
-//       console.log('results: ' + results);
-//     })
-//     .catch(error => {
-//       console.log(error);
-//     });
-
-//   return promise;
-//   console.log(promise);
-// }
-// const getNewsById = (state, id) => state.byId[id];
-
-// const getListByDate = (state, date) => state.listByDate[date];
-
-// const getPageOfList = (state, data) => getListByDate(state, date).page
-
-// /* ... */
-
-// const getNewsByDate = (state, date) => {
-//     return getListByDate(state, data).items.map((id) => {
-//         return getNewsById(state, id);
-//     });
-// }
   handleSubmit(event) {
     const calcBirthYear = age => {
       let today = new Date();
@@ -65,11 +30,13 @@ export class UserList extends Component {
     console.log(minYear);
     console.log(maxYear);
     event.preventDefault();
-      getRandomUsers(100, this.state.gender, minYear, maxYear)
+      getRandomUsers(10, this.state.gender, minYear, maxYear)
       .then( data => {
-        console.log(data.results.dob)
-        this.setState({users: data.filter(data => data.dob < maxYear || data.dob > minYear)}, console.log(this.state.users));
+        this.setState({
+          users: data
+        });
       });
+
   }
 
    handleChange(event) {
@@ -97,7 +64,7 @@ export class UserList extends Component {
       .then( data => {
         this.setState({
           users: data
-        }, console.log(data.dob));
+        }, console.log(data[0].dob));
       });
   }
 
@@ -116,7 +83,6 @@ export class UserList extends Component {
     const ucFirst = string => {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
-
     return this.state.users.map((user, index) => {
       const title = ucFirst(user.name.title);
       const first = ucFirst(user.name.first);
@@ -127,7 +93,6 @@ export class UserList extends Component {
       const phone = user.phone;
       const cell = user.cell;
       const nat = user.nat;
-
       return (
         <UserItem
           key={first+last+index}
@@ -160,19 +125,17 @@ export class UserList extends Component {
 
     return (
       <div className="header">
-      <div id="userPreferences">
-      <h2>Search Criteria</h2>
-      <label className="control-label">Age</label>
+      <div className="user-item-container">
       <input id="minAge" type="number" value={this.state.value} onChange={this.handleChange} defaultValue="18"/>
       <input id="maxAge" type="number" value={this.state.value} onChange={this.handleChange} defaultValue="99"/>
       <div onClick={this.setGender.bind(this)} onChange={this.setGender.bind(this)}>
-        <label className="radio-inline"><input type="radio" value="male" name="gender"/> Male</label>
-        <label className="radio-inline"><input type="radio" value="female" name="gender"/> Female</label>
+        <input type="radio" value="male" name="gender"/> Male
+        <input type="radio" value="female" name="gender"/> Female
       </div>
-        <input className="btn btn-default" type="submit" value="Submit" onClick={this.calculateAge}/>
-        <input className="btn btn-primary" type="submit" value="Submit" onClick={this.handleSubmit} />
+        <input type="submit" value="Submit" onClick={this.calculateAge}/>
+        <input type="submit" value="Submit" onClick={this.handleSubmit} />
       </div>
-        <h2>Candidates Found</h2>
+        <h2>Users</h2>
         <ul>
           {this.renderUserItems()}
         </ul>
