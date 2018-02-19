@@ -3,19 +3,20 @@ import Gender from '../Gender/Gender';
 import { calculateAge } from '../../Helpers';
 
 const Filter = (props) => {
+	render() {
+		
+	}
 		return (
-		<form className="filter">
-		<div>
-			Age: <input type="text" required placeholder="Minimum Age" defaultValue="18"/>
-			To: <input type="text" required placeholder="Maximum Age" defaultValue="100"/>
-		</div>
-		<div>
-		<div>
-		<Gender />
-		</div>
-		</div>
-		<button type="submit">Reset</button>
-		</form>
+      <div className="user-item-container">
+      <input id="minAge" type="text" value={this.state.value} onChange={this.handleChange} defaultValue="18"/>
+      <input id="maxAge" type="text" value={this.state.value} onChange={this.handleChange} defaultValue="99"/>
+      <div onClick={this.setGender.bind(this)} onChange={this.setApi.bind(this)}>
+        <input type="radio" value="male" name="gender"/> Male
+        <input type="radio" value="female" name="gender"/> Female
+      </div>
+        <input type="submit" value="Submit" onClick={this.calculateAge}/>
+        <input type="submit" value="Submit" onClick={this.handleSubmit} />
+      </div>
 		)
 }
 

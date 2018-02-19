@@ -15,13 +15,12 @@ export default class UserItem extends Component {
     });
   }
 
-
-
   static propTypes = {
     firstName: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
+    age: PropTypes.string.isRequired,
     dob: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,
     cell: PropTypes.string.isRequired,
@@ -33,6 +32,7 @@ export default class UserItem extends Component {
     const lastName = this.props.lastName;
     const title = this.props.title;
     const email = this.props.email;
+    const age = this.props.age;
     const dob = this.props.dob;
     const phone = this.props.phone;
     const cell = this.props.cell;
@@ -40,10 +40,11 @@ export default class UserItem extends Component {
     const nat = this.props.nat;
     return (
       <div className="user-item-container">
-        <img src={largePicture}/>
-        <div>Name: {title} {firstName} {lastName}</div>
+        <img className="photo" src={largePicture}/>
+        <div className="name lead">Name: {title} {firstName} {lastName}</div>
         <div>Email: {email} </div>
-        <div>Age: {dob} </div>
+        <div className="age lead">Age: {age} </div>
+        <div>Date Of Birth: {dob} </div>
        
           <button onClick={this.toggleModal}>
           Contact

@@ -16,15 +16,15 @@ class Modal extends React.Component {
       left: 0,
       right: 0,
       backgroundColor: 'rgba(0,0,0,0.3)',
-      padding: 50
+      padding: 20
     };
 
     // The modal "window"
     const modalStyle = {
       backgroundColor: '#fff',
       borderRadius: 5,
-      maxWidth: 500,
-      minHeight: 300,
+      maxWidth: 300,
+      minHeight: 50,
       margin: '0 auto',
       padding: 30
     };

@@ -1,5 +1,5 @@
 
-export function getRandomUsers(userCount, gender) {
+export function getRandomUsers(userCount, gender, minYear, maxYear) {
   const promise = fetch(`https://randomuser.me/api/?results=${userCount}&nat=US&gender=${gender}`)
     .then(response => {
       if(response.status >= 400) {
@@ -10,10 +10,12 @@ export function getRandomUsers(userCount, gender) {
     })
     .then(({results}) => {
       return results;
+      console.log('results: ' + results);
     })
     .catch(error => {
       console.log(error);
     });
 
   return promise;
+  console.log(promise);
 }
