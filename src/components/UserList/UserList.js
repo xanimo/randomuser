@@ -9,62 +9,76 @@ export class UserList extends Component {
     super(props);
     this.state = {
       users: [],
+      someArray: [],
       gender: '',
       minAge: 18,
-      maxAge: 99
+      maxAge: 99,
+      seed: '123'
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(event) {
-    const calcBirthYear = age => {
-      let today = new Date();
-      let years = today.getUTCFullYear();
-      return Math.abs(years - age);
-    }
-    let minYear = new Date();
-    minYear.setFullYear(calcBirthYear(this.state.minAge), 0, 1);
-    let maxYear = new Date();
-    maxYear.setFullYear(calcBirthYear(this.state.maxAge), 0, 1);
-    console.log(minYear);
-    console.log(maxYear);
-    event.preventDefault();
-      getRandomUsers(10, this.state.gender, minYear, maxYear)
-      .then( data => {
+  handleSubmit(e) {
+    switch (e.target.id) {
+      case "btnReset":
+        window.location.reload()
+      break;
+      case "btnSubmit":
         this.setState({
-          users: data
+            seed: ""
         });
-      });
-
+      break;
+    }
+        // e.preventDefault();
+        getRandomUsers(100, this.state.seed, this.state.gender)
+        .then( data => {
+          this.setState({
+            users: data,
+            seed: ""
+          });
+        });
   }
 
-   handleChange(event) {
-    switch (event.target.id) {
+   handleChange(e) {
+    switch (e.target.id) {
       case "minAge":
-      this.setState({ minAge: event.target.value });
+      this.setState({ 
+        minAge: e.target.value,
+        seed: ""
+       });
       break;
       case "maxAge":
-      this.setState({ maxAge: event.target.value });
+      this.setState({ 
+        maxAge: e.target.value, 
+        seed: ""
+      });
       break;
     }
-    // filterResultsByAge(this.state.minAge, this.state.maxAge);
   }
 
 
 
-  setGender(event) {
-    this.setState({ gender: event.target.value })
+  setGender(e) {
+    // set gender to male or female pre submit
+    this.setState({ gender: e.target.value })
+  }
+
+  reset() {
+    // set seeed to "123" to fetch original users
+            this.setState({
+          seed: ""
+        });
   }
 
   componentWillMount() {
       //request random users
       //set state to fetching
-    getRandomUsers(10, this.state.gender)
-      .then( data => {
+    getRandomUsers(100, this.state.seed, this.state.gender)
+      .then( (data) => {
         this.setState({
           users: data
-        }, console.log(data[0].dob));
+        });
       });
   }
 
@@ -80,16 +94,31 @@ export class UserList extends Component {
       return age;
     };
 
+    // capitalize first letter
     const ucFirst = string => {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    return this.state.users.map((user, index) => {
+
+    // iterate results and push by filter preference
+    let user = this.state.users;
+    let userByAge = [];
+    let minAge = this.state.minAge;
+    let maxAge = this.state.maxAge;
+    Object.keys(user).map(function(key, index) {
+      let val = user[key];
+      if (calcAge(val.dob) >= minAge && calcAge(val.dob) <= maxAge) {
+      userByAge.push(val);
+      }
+    })
+    console.log(userByAge);
+
+  //   if (calcAge(this.state.users.dob) >= this.state.minAge && calcAge(this.state.users.dob) <= this.state.maxAge) {
+    return userByAge.splice(0, 10).map((user, index) => {
       const title = ucFirst(user.name.title);
       const first = ucFirst(user.name.first);
       const last = ucFirst(user.name.last);
       const email = user.email;
       const age = calcAge(user.dob);
-      const dob = user.dob;
       const phone = user.phone;
       const cell = user.cell;
       const nat = user.nat;
@@ -101,20 +130,16 @@ export class UserList extends Component {
           lastName={last}
           email={email}
           age={age}
-          dob={dob}
           phone={phone}
           cell={cell}
           large={user.picture.large}
-          nat={nat}/>
-          
+          nat={nat}/> 
       );
     });
   }
-
+  
   render () {
     if(this.state.fetching) {
-
-
       //show loader
       return (
         <div>
@@ -132,8 +157,8 @@ export class UserList extends Component {
         <input type="radio" value="male" name="gender"/> Male
         <input type="radio" value="female" name="gender"/> Female
       </div>
-        <input type="submit" value="Submit" onClick={this.calculateAge}/>
-        <input type="submit" value="Submit" onClick={this.handleSubmit} />
+        <input id="btnReset" type="submit" value="Reset" onClick={this.handleSubmit}/>
+        <input id="btnSubmit" type="submit" value="Submit" onClick={this.handleSubmit} />
       </div>
         <h2>Users</h2>
         <ul>

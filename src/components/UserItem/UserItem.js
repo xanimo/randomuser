@@ -20,8 +20,7 @@ export default class UserItem extends Component {
     lastName: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-    age: PropTypes.string.isRequired,
-    dob: PropTypes.string.isRequired,
+    age: PropTypes.number.isRequired,
     phone: PropTypes.string.isRequired,
     cell: PropTypes.string.isRequired,
     largePicture: PropTypes.string,
@@ -33,7 +32,6 @@ export default class UserItem extends Component {
     const title = this.props.title;
     const email = this.props.email;
     const age = this.props.age;
-    const dob = this.props.dob;
     const phone = this.props.phone;
     const cell = this.props.cell;
     const largePicture = this.props.large;
@@ -44,7 +42,6 @@ export default class UserItem extends Component {
         <div className="name lead">Name: {title} {firstName} {lastName}</div>
         <div>Email: {email} </div>
         <div className="age lead">Age: {age} </div>
-        <div>Date Of Birth: {dob} </div>
        
           <button onClick={this.toggleModal}>
           Contact

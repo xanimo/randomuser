@@ -1,23 +1,38 @@
 import React from 'react';
-import Gender from '../Gender/Gender';
-import { calculateAge } from '../../Helpers';
 
-const Filter = (props) => {
-	render() {
-		
+class Filter extends React.Component {
+	constructor() {
+		super();
+		this.state = {items: []}
 	}
-		return (
-      <div className="user-item-container">
-      <input id="minAge" type="text" value={this.state.value} onChange={this.handleChange} defaultValue="18"/>
-      <input id="maxAge" type="text" value={this.state.value} onChange={this.handleChange} defaultValue="99"/>
-      <div onClick={this.setGender.bind(this)} onChange={this.setApi.bind(this)}>
-        <input type="radio" value="male" name="gender"/> Male
-        <input type="radio" value="female" name="gender"/> Female
-      </div>
-        <input type="submit" value="Submit" onClick={this.calculateAge}/>
-        <input type="submit" value="Submit" onClick={this.handleSubmit} />
-      </div>
+	componenetWillMount() {
+		fetch('http://swapi.co/api/people/?format=json')
+		.then ( response => response.json() )
+		.then (({results: items}) => this.setState({items}))
+	}
+	filter(e){
+		this.setState({filter: e.target.value})
+	}
+	render(){
+		let items = this.state.items;
+		if(this.state.filter){
+			items = items.filter ( item =>
+				item.name.toLowerCase()
+				.includes(this.state.filter.toLowerCase()))
+		}
+
+	return (
+		<div>
+		<input type="text"
+		onChange={this.filter.bind(this)}/>
+			{items.map(item =>
+				<Person key={item.name} person={item} />)}
+		}
+		</div>
 		)
+	}	
 }
+
+const Person = (props) => <h4>{props.person.name}</h4>
 
 export default Filter;
